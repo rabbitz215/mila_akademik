@@ -172,10 +172,17 @@
 			</div>
 			<div class="row mt-4">
 				<div class="col-md-3 offset-md-1">
-					@if (auth()->user()->student->krss()->where('semester', '<', $krs->semester)->count() > 0)
-						<p>IP Semester lalu : {{ number_format($krs->previousKrs()->calculated_grade, 2) }}</p>
-					@endif
-					<p>IP Komulatif : {{ number_format($krs->calculated_all_grade, 2) }}</p>
+                    @if (auth()->user()->student)
+                        @if (auth()->user()->student->krss()->where('semester', '<', $krs->semester)->count() > 0)
+                        <p>IP Semester lalu : {{ number_format($krs->previousKrs()?->calculated_grade, 2) }}</p>
+                        @endif
+                        <p>IP Komulatif : {{ number_format($krs->calculated_all_grade, 2) }}</p>
+                    @else
+                        @if ($krs->student->krss()->where('semester', '<', $krs->semester)->count() > 0)
+                        <p>IP Semester lalu : {{ number_format($krs->previousKrs()?->calculated_grade, 2) }}</p>
+                        @endif
+                        <p>IP Komulatif : {{ number_format($krs->calculated_all_grade, 2) }}</p>
+                    @endif
 				</div>
 				<div class="col-md-3 text-center">
 					{{-- <p>Menyetujui,</p>

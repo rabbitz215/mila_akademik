@@ -60,6 +60,10 @@ class Krs extends Model
         $total_sks = $this->total_sks;
         $khs = Khs::where('student_id', $this->student_id)->where('semester', $this->semester)->first();
 
+        if(!$khs){
+            return 0;
+        }
+
         return $this->calculate_grade($total_sks, $khs);
     }
 
@@ -76,10 +80,18 @@ class Krs extends Model
 
     public function calculate_all_grade()
     {
-        $previous_krss = $this->where('student_id', auth()->user()->student->id)
+        $user = auth()->user()->student;
+        if(!auth()->user()->student){
+            $user = $this->student;
+        }
+        $previous_krss = $this->where('student_id', $user->id)
             ->where('semester', '<=', $this->semester)
             ->orderBy('semester', 'desc')
             ->get();
+
+        if($previous_krss->count() <= 0){
+            return 0;
+        }
 
         $total_grades = 0;
 
@@ -97,10 +109,21 @@ class Krs extends Model
 
     public function previousKrs()
     {
-        return $this->where('student_id', auth()->user()->student->id)
+        $user = auth()->user()->student;
+        if(!auth()->user()->student){
+            $user = $this->student;
+        }
+
+        $previous = $this->where('student_id', $user->id)
             ->where('semester', '<', $this->semester)
             ->orderBy('semester', 'desc')
             ->first();
+
+        if(!$previous){
+            return null;
+        }
+
+        return $previous;
     }
 
     public function getDosenParentAttribute()

@@ -34,6 +34,7 @@ class DosenController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->input('kelas', []));
         try {
             DB::beginTransaction();
             $dosen = new Dosen();

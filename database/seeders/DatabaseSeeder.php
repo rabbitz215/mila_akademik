@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             StudyProgramSeeder::class,
             StudentSeeder::class,
             MatkulSeeder::class,
+            SettingSeeder::class,
         ]);
     }
 }
